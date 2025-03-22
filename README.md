@@ -52,3 +52,5 @@ Avant de commencer, assurez-vous d'avoir installé les outils suivants :
 
 7. Accédez à l'application à l'adresse suivante : `http://localhost:8000`
 
+
+
