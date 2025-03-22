@@ -15,7 +15,6 @@ class UserService
             'name' => ['required'],
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'confirmed'],
-            '' => [],
         ]);
 
         // check validator
