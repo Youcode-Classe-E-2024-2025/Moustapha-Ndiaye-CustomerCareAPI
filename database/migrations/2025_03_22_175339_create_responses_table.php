@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('responses', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('ticket_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained();
+            $table->text('content');
+            $table->boolean('is_internal')->default(false);
+            $table->boolean('is_resolution')->default(false);
             $table->timestamps();
         });
     }

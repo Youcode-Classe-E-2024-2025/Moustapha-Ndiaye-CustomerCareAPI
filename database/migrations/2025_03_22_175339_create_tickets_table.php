@@ -13,6 +13,17 @@ return new class extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->text('description');
+            $table->foreignId('creator_id')->constrained('users');
+            $table->foreignId('assigned_to')->nullable()->constrained('users');
+            $table->foreignId('status_id')->constrained('statuses');
+            $table->string('priority')->default('medium'); // low, medium, high, urgent
+            $table->string('category')->nullable();
+            $table->dateTime('due_date')->nullable();
+            $table->boolean('is_resolved')->default(false);
+            $table->dateTime('resolved_at')->nullable();
+            $table->text('resolution_note')->nullable();
             $table->timestamps();
         });
     }

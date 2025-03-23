@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('attachments', function (Blueprint $table) {
             $table->id();
+            $table->morphs('attachable');
+            $table->string('filename');
+            $table->string('file_path');
+            $table->integer('file_size');
+            $table->string('mime_type');
+            $table->foreignId('uploaded_by')->constrained('users');
             $table->timestamps();
         });
     }
