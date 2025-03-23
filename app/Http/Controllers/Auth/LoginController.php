@@ -33,12 +33,24 @@ class LoginController extends Controller
         // authentificate user 
         Auth::login($loginResult['user']);
 
-        return response()->json(
-            [
-                'success' => true,
-                'message' => 'Login Successful',
-                'user' => $loginResult['user']
-            ]
-        );
+        // return response()->json(
+        //     [
+        //         'success' => true,
+        //         'message' => 'Login Successful',
+        //         'user' => $loginResult['user']
+        //     ]
+        // );
+         // Redirect based on role
+        if ($user->isAdmin()) {
+            return redirect()->route('admin.dashboard')->with('success', 'Welcome Admin');
+        }
+
+        if ($user->isAgent()) {
+            return redirect()->route('agent.dashboard')->with('success', 'Welcome Agent');
+        }
+
+        // Default redirect for 'client'
+        return redirect()->route('client.dashboard')->with('success', 'Welcome Client');
+
     }
 }

@@ -15,6 +15,9 @@ Route::post('/authenticate', [LoginController::class, 'authenticate'])->name('au
 // logout routes
 Route::post('logout', [LogoutController::class, 'logout']);
 
-// users pages
-Route::get('/userProfil', [UserController::class, 'showProfile'])->name('userProfil');
-Route::get('/dashboard', [UserController::class, 'showDashboard'])->name('dashboard');
+
+// page based on role
+Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+Route::get('/agent/dashboard', [AgentController::class, 'index'])->name('agent.dashboard');
+Route::get('/client/dashboard', [ClientController::class, 'index'])->name('client.dashboard');
+
