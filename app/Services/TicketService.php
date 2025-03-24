@@ -93,28 +93,56 @@ class TicketService
     }
 
     /**
-         * Create a new ticket 
-         * @param array $data
-         * return ticket
-         */
-        public function createTicket(array $data): Ticket {
-            // set default status if not provided
-            if (!$data['status_id']){
-                $newStatus = Status::where('name', 'New')->first();
-                $data['status_id'] = $newStatus ? $newStatus : 1;
-            }
-
-            //set creator_id to current user id not specified
-            if (!$data['creator_id']){
-                $data['creator_id'] = Auth::id();
-            }
-
-            $ticket = Ticket::create($data);
-
-            // create history entry for tickect reservation
-            $this->createHistoryEntry($ticket, 'created', null, 'created', 'Ticket created');
-
-            return $ticket;
+     * Create a new ticket 
+     * @param array $data
+     * @return ticket
+     */
+    public function createTicket(array $data): Ticket {
+        // set default status if not provided
+        if (!$data['status_id']){
+            $newStatus = Status::where('name', 'New')->first();
+            $data['status_id'] = $newStatus ? $newStatus : 1;
         }
+
+        //set creator_id to current user id not specified
+        if (!$data['creator_id']){
+            $data['creator_id'] = Auth::id();
+        }
+
+        $ticket = Ticket::create($data);
+
+        // create history entry for tickect reservation
+        $this->createHistoryEntry($ticket, 'created', null, 'created', 'Ticket created');
+
+        return $ticket;
+    }
  
+    /**
+     * Update existing ticket 
+     * @param int $id
+     * @param array $data
+     * @return ticket 
+     */
+
+    public function updateTicket(array $data, int $id): Ticket {
+        $ticket = Ticket::findOrFail($id);
+        $oldValues = $ticket->array();
+
+        $ticket->update($data);
+
+        //history changes for entries
+        foreach ($data as $field => $value) {
+            if (isset($oldValues[$field]) && $oldValues[$field] != $value) {
+                $this->createHistoryEntry(
+                    $ticket,
+                    $field,
+                    $oldValues[$field],
+                    $value,
+                    "Changed $field from '{$oldValues[$field]}' to '$value'"
+                );
+            }
+        }
+
+        return $ticket->fresh();
+    }
 }
