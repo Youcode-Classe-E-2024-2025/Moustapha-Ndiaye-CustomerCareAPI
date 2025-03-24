@@ -11,6 +11,7 @@ use App\Services\TicketService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\JsonResponse;
+use App\Models\Ticket; 
 
 /**
  * @OA\Info(
