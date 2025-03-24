@@ -91,5 +91,30 @@ class TicketService
 
         return $ticket;
     }
+
+    /**
+         * Create a new ticket 
+         * @param array $data
+         * return ticket
+         */
+        public function createTicket(array $data): Ticket {
+            // set default status if not provided
+            if (!$data['status_id']){
+                $newStatus = Status::where('name', 'New')->first();
+                $data['status_id'] = $newStatus ? $newStatus : 1;
+            }
+
+            //set creator_id to current user id not specified
+            if (!$data['creator_id']){
+                $data['creator_id'] = Auth::id();
+            }
+
+            $ticket = Ticket::create($data);
+
+            // create history entry for tickect reservation
+            $this->createHistoryEntry($ticket, 'created', null, 'created', 'Ticket created');
+
+            return $ticket;
+        }
  
 }
