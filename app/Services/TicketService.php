@@ -57,5 +57,39 @@ class TicketService
          
          return $query->paginate($perPage);
      }
+
+     /**
+        * Get ticket by id 
+        *@param it $id
+        *@return Ticket
+      */
+
+    public function getTicket(int $id): Ticket {
+        // get user 
+        $user = Auth::user();
+        // get ticket 
+        $ticket = Ticket::with(
+       [
+        'creator', 
+        'assignedAgent', 
+        'status',
+        'responses' => function($query) use ($user){
+            if ($user && !isClient()){
+                return $query;
+            }
+            return $query->where('is_internal', false);
+        },
+        'responses.user',
+        'attachments'
+       ]
+        )->findOrFail($id);
+
+        // check if user has acess to his ticket 
+        if ($user && isClient() && $ticket->creator_id !== $user->id){
+            throw new \Illuminate\Auth\Access\AuthorizationException('You do not have permission to view this ticket.');
+        }
+
+        return $ticket;
+    }
  
 }
