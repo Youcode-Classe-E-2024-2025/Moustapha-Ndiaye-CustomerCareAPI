@@ -531,83 +531,6 @@
                 }
             }
         },
-        "/api/tickets/{id}/history": {
-            "get": {
-                "tags": [
-                    "Tickets"
-                ],
-                "summary": "Get ticket history",
-                "operationId": "0a23d942b12f07e3d91803d79fc2db5a",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "Ticket ID",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Ticket history",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "id": {
-                                                        "type": "integer"
-                                                    },
-                                                    "ticket_id": {
-                                                        "type": "integer"
-                                                    },
-                                                    "action": {
-                                                        "type": "string",
-                                                        "example": "status_changed"
-                                                    },
-                                                    "description": {
-                                                        "type": "string",
-                                                        "example": "Status changed from 'Open' to 'In Progress'"
-                                                    },
-                                                    "performed_by": {
-                                                        "properties": {
-                                                            "id": {
-                                                                "type": "integer"
-                                                            },
-                                                            "name": {
-                                                                "type": "string"
-                                                            }
-                                                        },
-                                                        "type": "object"
-                                                    },
-                                                    "created_at": {
-                                                        "type": "string",
-                                                        "format": "date-time"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Ticket not found"
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    }
-                }
-            }
-        },
         "/api/tickets/{id}/assign": {
             "post": {
                 "tags": [
@@ -787,6 +710,83 @@
                     },
                     "422": {
                         "description": "Validation error"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            }
+        },
+        "/api/tickets/{id}/history": {
+            "get": {
+                "tags": [
+                    "Tickets"
+                ],
+                "summary": "Get ticket history",
+                "operationId": "e044de677173e9d457a1cdbb9bdb5390",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Ticket ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ticket history",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "ticket_id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "action": {
+                                                        "type": "string",
+                                                        "example": "status_changed"
+                                                    },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "example": "Status changed from 'Open' to 'In Progress'"
+                                                    },
+                                                    "performed_by": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer"
+                                                            },
+                                                            "name": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Ticket not found"
                     },
                     "401": {
                         "description": "Unauthenticated"

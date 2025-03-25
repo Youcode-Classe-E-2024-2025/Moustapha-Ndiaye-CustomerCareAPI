@@ -343,55 +343,7 @@ class TicketController extends Controller
         ], 200);
     }
 
-    /**
-     * @OA\Get(
-     *     path="/api/tickets/{id}/history",
-     *     summary="Get ticket history",
-     *     tags={"Tickets"},
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         description="Ticket ID",
-     *         required=true,
-     *         @OA\Schema(type="integer")
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Ticket history",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="data", type="array", 
-     *                 @OA\Items(
-     *                     type="object",
-     *                     @OA\Property(property="id", type="integer"),
-     *                     @OA\Property(property="ticket_id", type="integer"),
-     *                     @OA\Property(property="action", type="string", example="status_changed"),
-     *                     @OA\Property(property="description", type="string", example="Status changed from 'Open' to 'In Progress'"),
-     *                     @OA\Property(property="performed_by", type="object",
-     *                         @OA\Property(property="id", type="integer"),
-     *                         @OA\Property(property="name", type="string")
-     *                     ),
-     *                     @OA\Property(property="created_at", type="string", format="date-time")
-     *                 )
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Ticket not found"
-     *     ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="Unauthenticated"
-     *     )
-     * )
-     */
-    public function history(int $id): ResourceCollection
-    {
-        $history = $this->ticketService->getTicketHistory($id);
-        
-        return TicketHistoryResource::collection($history);
-    }
+    
 
     /**
      * @OA\Post(
