@@ -79,6 +79,35 @@
         </form>
     </div>
 
-    
+    <script>
+        function submitForm() {
+            // Reset errors before submitting
+            this.errors = [];
+
+            const formData = new FormData();
+            formData.append('name', this.name);
+            formData.append('email', this.email);
+            formData.append('password', this.password);
+            formData.append('password_confirmation', this.password_confirmation);
+            formData.append('_token', '{{ csrf_token() }}');
+
+            fetch('{{ url("registrationUser") }}', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.errors) {
+                    this.errors = Object.values(data.errors).flat();
+                } else {
+                    window.location.href = 'login';  // Redirect to login page
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                this.errors.push("Something went wrong, please try again.");
+            });
+        }
+    </script>
 </body>
 </html>
