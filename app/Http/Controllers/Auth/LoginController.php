@@ -15,6 +15,11 @@ class LoginController extends Controller
         $this->loginService = $loginService;
     }
 
+    public function showLoginForm()
+    {
+        return view('auth.login');
+    }
+
     public function login(Request $request){
         // validate login data
         $result = $this->loginService->validateLoginData($request->all());
