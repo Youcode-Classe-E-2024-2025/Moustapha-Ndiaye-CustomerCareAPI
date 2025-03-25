@@ -338,7 +338,9 @@ class TicketController extends Controller
     {
         $this->ticketService->deleteTicket($id);
         
-        return response()->json(null, 204);
+        return response()->json([
+            'message' => 'Ticket deleted successfully.'
+        ], 200);
     }
 
     /**
