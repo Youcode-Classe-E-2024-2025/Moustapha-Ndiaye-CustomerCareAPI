@@ -60,6 +60,40 @@
         </div>
     </div>
 
-   
+    <script>
+        function loginForm() {
+            return {
+                form: {
+                    email: '',
+                    password: '',
+                },
+                errors: [],
+                async submitForm() {
+                    this.errors = [];
+                    try {
+                        const response = await fetch('{{ url('authenticate') }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            },
+                            body: JSON.stringify(this.form),
+                        });
+
+                        const data = await response.json();
+
+                        if (response.ok) {
+                            window.location.href = '/dashboard';  // Redirect after successful login
+                        } else {
+                            this.errors = data.errors ? Object.values(data.errors).flat() : ['Something went wrong'];
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        this.errors = ['Something went wrong, please try again.'];
+                    }
+                }
+            };
+        }
+    </script>
 </body>
 </html>
