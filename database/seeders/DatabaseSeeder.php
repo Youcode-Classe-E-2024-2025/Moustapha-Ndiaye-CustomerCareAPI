@@ -1,5 +1,4 @@
 <?php
-// database/seeders/DatabaseSeeder.php
 
 namespace Database\Seeders;
 
@@ -8,6 +7,8 @@ use App\Models\User;
 use App\Models\Status;
 use App\Models\Ticket;
 use App\Models\Response;
+use App\Models\Priority;
+use App\Models\Category;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
@@ -85,6 +86,28 @@ class DatabaseSeeder extends Seeder
             Status::create($status);
         }
 
+        // Create priorities
+        $priorities = [
+            ['name' => 'High', 'color' => '#e74c3c'],
+            ['name' => 'Medium', 'color' => '#f39c12'],
+            ['name' => 'Low', 'color' => '#7f8c8d'],
+        ];
+
+        foreach ($priorities as $priority) {
+            Priority::create($priority);
+        }
+
+        // Create categories
+        $categories = [
+            ['name' => 'Bug'],
+            ['name' => 'Feature Request'],
+            ['name' => 'Authentication'],
+        ];
+
+        foreach ($categories as $category) {
+            Category::create($category);
+        }
+
         // Create sample tickets and responses
         $clientId = 3; // Client user ID
         $agentId = 2;  // Agent user ID
@@ -151,42 +174,5 @@ class DatabaseSeeder extends Seeder
             'content' => 'Need to check with the dev team about recent changes to the form validation.',
             'is_internal' => true,
         ]);
-
-    
-        // Ajouter les statuts
-        $statuses = [
-            ['name' => 'New', 'description' => 'A new ticket that has not been assigned yet', 'color' => '#3498db', 'order' => 1, 'is_default' => true],
-            ['name' => 'Open', 'description' => 'Ticket has been assigned but work has not started', 'color' => '#2ecc71', 'order' => 2, 'is_default' => false],
-        ];
-
-        foreach ($statuses as $status) {
-            Status::create($status);
-        }
-
-        // Ajouter les priorités
-        $priorities = [
-            ['name' => 'High', 'color' => '#e74c3c'],
-            ['name' => 'Medium', 'color' => '#f39c12'],
-            ['name' => 'Low', 'color' => '#7f8c8d'],
-        ];
-
-        foreach ($priorities as $priority) {
-            Priority::create($priority);
-        }
-
-        // Ajouter les catégories
-        $categories = [
-            ['name' => 'Bug'],
-            ['name' => 'Feature Request'],
-            ['name' => 'Authentication'],
-        ];
-
-        foreach ($categories as $category) {
-            Category::create($category);
-        }
-    
-
     }
-
-    
 }
