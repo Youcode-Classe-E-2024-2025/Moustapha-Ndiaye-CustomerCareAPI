@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <title>Gestion des Tickets</title>
+    <title>Ticket Management</title>
 </head>
 <body class="bg-gray-100">
     <div 
@@ -14,16 +14,16 @@
         class="container mx-auto px-4 py-8"
     >
         <div class="bg-white shadow-rounded-lg p-6">
-            <h1 class="text-2xl font-bold mb-6 text-gray-800">Gestion des Tickets</h1>
+            <h1 class="text-2xl font-bold mb-6 text-gray-800">Ticket Management</h1>
 
-            <!-- Filtres -->
+            <!-- Filters -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                 <select 
                     x-model="filters.status_id" 
                     @change="fetchTickets()"
                     class="form-select border-gray-300 rounded-md"
                 >
-                    <option value="">Tous les statuts</option>
+                    <option value="">All statuses</option>
                     <template x-for="status in statuses" :key="status.id">
                         <option :value="status.id" x-text="status.name"></option>
                     </template>
@@ -34,7 +34,7 @@
                     @change="fetchTickets()"
                     class="form-select border-gray-300 rounded-md"
                 >
-                    <option value="">Toutes les priorités</option>
+                    <option value="">All priorities</option>
                     <template x-for="priority in priorities" :key="priority.id">
                         <option :value="priority.name" x-text="priority.name"></option>
                     </template>
@@ -45,7 +45,7 @@
                     @change="fetchTickets()"
                     class="form-select border-gray-300 rounded-md"
                 >
-                    <option value="">Toutes les catégories</option>
+                    <option value="">All categories</option>
                     <template x-for="category in categories" :key="category.id">
                         <option :value="category.name" x-text="category.name"></option>
                     </template>
@@ -55,20 +55,20 @@
                     @click="resetFilters()"
                     class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
                 >
-                    Réinitialiser
+                    Reset
                 </button>
             </div>
 
-            <!-- Tableau des Tickets -->
+            <!-- Tickets Table -->
             <div class="overflow-x-auto">
                 <table class="w-full bg-white shadow-md rounded-lg">
                     <thead class="bg-gray-100">
                         <tr>
                             <th class="px-4 py-3 text-left">ID</th>
-                            <th class="px-4 py-3 text-left">Titre</th>
-                            <th class="px-4 py-3 text-left">Statut</th>
-                            <th class="px-4 py-3 text-left">Priorité</th>
-                            <th class="px-4 py-3 text-left">Catégorie</th>
+                            <th class="px-4 py-3 text-left">Title</th>
+                            <th class="px-4 py-3 text-left">Status</th>
+                            <th class="px-4 py-3 text-left">Priority</th>
+                            <th class="px-4 py-3 text-left">Category</th>
                             <th class="px-4 py-3 text-left">Actions</th>
                         </tr>
                     </thead>
@@ -103,16 +103,10 @@
                                 <td class="px-4 py-3">
                                     <div class="flex space-x-2">
                                         <button 
-                                            @click="viewTicketDetails(ticket.id)"
-                                            class="bg-blue-500 text-white px-3 py-1 rounded-md text-sm hover:bg-blue-600"
-                                        >
-                                            Détails
-                                        </button>
-                                        <button 
                                             @click="openUpdateModal(ticket)"
                                             class="bg-green-500 text-white px-3 py-1 rounded-md text-sm hover:bg-green-600"
                                         >
-                                            Modifier
+                                            Edit
                                         </button>
                                     </div>
                                 </td>
@@ -129,7 +123,7 @@
                     :disabled="!tickets.prev_page_url"
                     class="bg-gray-200 px-4 py-2 rounded-md disabled:opacity-50"
                 >
-                    Précédent
+                    Previous
                 </button>
                 <span x-text="`Page ${tickets.current_page} / ${tickets.last_page}`" class="text-gray-600"></span>
                 <button 
@@ -137,21 +131,21 @@
                     :disabled="!tickets.next_page_url"
                     class="bg-gray-200 px-4 py-2 rounded-md disabled:opacity-50"
                 >
-                    Suivant
+                    Next
                 </button>
             </div>
 
-            <!-- Modal de Modification de Ticket -->
+            <!-- Ticket Update Modal -->
             <div 
                 x-show="updateModal.isOpen" 
                 x-cloak
                 class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
             >
                 <div class="bg-white rounded-lg p-6 w-96">
-                    <h2 class="text-xl font-bold mb-4">Modifier le Ticket</h2>
+                    <h2 class="text-xl font-bold mb-4">Edit Ticket</h2>
                     <form @submit.prevent="updateTicket()">
                         <div class="mb-4">
-                            <label class="block mb-2">Statut</label>
+                            <label class="block mb-2">Status</label>
                             <select 
                                 x-model="updateModal.status_id" 
                                 class="w-full border rounded-md p-2"
@@ -162,7 +156,7 @@
                             </select>
                         </div>
                         <div class="mb-4">
-                            <label class="block mb-2">Priorité</label>
+                            <label class="block mb-2">Priority</label>
                             <select 
                                 x-model="updateModal.priority_id" 
                                 class="w-full border rounded-md p-2"
@@ -178,13 +172,13 @@
                                 @click="updateModal.isOpen = false"
                                 class="bg-gray-200 px-4 py-2 rounded-md"
                             >
-                                Annuler
+                                Cancel
                             </button>
                             <button 
                                 type="submit" 
                                 class="bg-blue-500 text-white px-4 py-2 rounded-md"
                             >
-                                Enregistrer
+                                Save
                             </button>
                         </div>
                     </form>
@@ -193,9 +187,135 @@
         </div>
     </div>
 
-  
-    <style>
-    [x-cloak] { display: none !important; }
-    </style>
+    <script>
+    function ticketManagementSystem() {
+        return {
+            tickets: {
+                data: [],
+                current_page: 1,
+                last_page: 1,
+                prev_page_url: null,
+                next_page_url: null
+            },
+            statuses: [],
+            priorities: [],
+            categories: [],
+            filters: {
+                status_id: '',
+                priority: '',
+                category: ''
+            },
+            updateModal: {
+                isOpen: false,
+                ticketId: null,
+                status_id: null,
+                priority_id: null
+            },
+            
+            initializeData() {
+                this.fetchStatuses()
+                this.fetchPriorities()
+                this.fetchCategories()
+                this.fetchTickets()
+            },
+
+            async fetchStatuses() {
+                try {
+                    const response = await fetch('/api/tickets/statuses')
+                    this.statuses = await response.json()
+                } catch (error) {
+                    console.error('Error loading statuses:', error)
+                }
+            },
+
+            async fetchPriorities() {
+                try {
+                    const response = await fetch('/api/tickets/priorities')
+                    this.priorities = await response.json()
+                } catch (error) {
+                    console.error('Error loading priorities:', error)
+                }
+            },
+
+            async fetchCategories() {
+                try {
+                    const response = await fetch('/api/tickets/categories')
+                    this.categories = await response.json()
+                } catch (error) {
+                    console.error('Error loading categories:', error)
+                }
+            },
+
+            async fetchTickets() {
+                try {
+                    const params = new URLSearchParams()
+                    if (this.filters.status_id) params.append('status_id', this.filters.status_id)
+                    if (this.filters.priority) params.append('priority', this.filters.priority)
+                    if (this.filters.category) params.append('category', this.filters.category)
+                    
+                    const response = await fetch(`/api/tickets?${params.toString()}`)
+                    this.tickets = await response.json()
+                } catch (error) {
+                    console.error('Error loading tickets:', error)
+                }
+            },
+
+            async updateTicket() {
+                try {
+                    const response = await fetch(`/api/tickets/${this.updateModal.ticketId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                        },
+                        body: JSON.stringify({
+                            status_id: this.updateModal.status_id,
+                            priority_id: this.updateModal.priority_id
+                        })
+                    })
+
+                    if (response.ok) {
+                        this.updateModal.isOpen = false
+                        this.fetchTickets()
+                    }
+                } catch (error) {
+                    console.error('Error updating ticket:', error)
+                }
+            },
+
+            resetFilters() {
+                this.filters = {
+                    status_id: '',
+                    priority: '',
+                    category: ''
+                }
+                this.fetchTickets()
+            },
+
+            openUpdateModal(ticket) {
+                this.updateModal = {
+                    isOpen: true,
+                    ticketId: ticket.id,
+                    status_id: ticket.status.id,
+                    priority_id: ticket.priority.id
+                }
+            },
+
+            prevPage() {
+                if (this.tickets.prev_page_url) {
+                    this.tickets.current_page--
+                    this.fetchTickets()
+                }
+            },
+
+            nextPage() {
+                if (this.tickets.next_page_url) {
+                    this.tickets.current_page++
+                    this.fetchTickets()
+                }
+            }
+        }
+    }
+    </script>
 </body>
 </html>
