@@ -151,5 +151,42 @@ class DatabaseSeeder extends Seeder
             'content' => 'Need to check with the dev team about recent changes to the form validation.',
             'is_internal' => true,
         ]);
+
+    
+        // Ajouter les statuts
+        $statuses = [
+            ['name' => 'New', 'description' => 'A new ticket that has not been assigned yet', 'color' => '#3498db', 'order' => 1, 'is_default' => true],
+            ['name' => 'Open', 'description' => 'Ticket has been assigned but work has not started', 'color' => '#2ecc71', 'order' => 2, 'is_default' => false],
+        ];
+
+        foreach ($statuses as $status) {
+            Status::create($status);
+        }
+
+        // Ajouter les priorités
+        $priorities = [
+            ['name' => 'High', 'color' => '#e74c3c'],
+            ['name' => 'Medium', 'color' => '#f39c12'],
+            ['name' => 'Low', 'color' => '#7f8c8d'],
+        ];
+
+        foreach ($priorities as $priority) {
+            Priority::create($priority);
+        }
+
+        // Ajouter les catégories
+        $categories = [
+            ['name' => 'Bug'],
+            ['name' => 'Feature Request'],
+            ['name' => 'Authentication'],
+        ];
+
+        foreach ($categories as $category) {
+            Category::create($category);
+        }
+    
+
     }
+
+    
 }
