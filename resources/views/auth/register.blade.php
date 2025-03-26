@@ -6,6 +6,10 @@
     <title>Registration</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.js" defer></script>
+    
+    <!-- Token CSRF pour Laravel -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <style>
         body {
             background-color: #DFDBE5;
@@ -22,23 +26,13 @@
     </style>
 </head>
 <body>
-    <div class="bg-white p-8 rounded-lg shadow-xl max-w-md w-full opacity-80" x-data="{
-        name: '', email: '', password: '', password_confirmation: '', errors: []
-    }">
+
+    <div class="bg-white p-8 rounded-lg shadow-xl max-w-md w-full opacity-80" x-data="registrationForm()">
         <h1 class="text-2xl font-bold text-gray-700 mb-6 text-center">Create Account</h1>
 
-        <!-- Error Display -->
-        <template x-if="errors.length > 0">
-            <div class="bg-red-50 text-red-600 p-4 rounded mb-6">
-                <ul class="list-disc pl-5">
-                    <template x-for="(error, index) in errors" :key="index">
-                        <li x-text="error"></li>
-                    </template>
-                </ul>
-            </div>
-        </template>
+        
 
-        <!-- Form -->
+        <!-- Formulaire -->
         <form @submit.prevent="submitForm">
             <div class="mb-4">
                 <label for="name" class="block text-gray-700 font-medium mb-2">Name</label>
@@ -80,34 +74,45 @@
     </div>
 
     <script>
-        function submitForm() {
-            // Reset errors before submitting
-            this.errors = [];
+        function registrationForm() {
+            return {
+                name: '',
+                email: '',
+                password: '',
+                password_confirmation: '',
+                errors: [],
+                submitForm() {
+                    this.errors = []; 
 
-            const formData = new FormData();
-            formData.append('name', this.name);
-            formData.append('email', this.email);
-            formData.append('password', this.password);
-            formData.append('password_confirmation', this.password_confirmation);
-            formData.append('_token', '{{ csrf_token() }}');
+                    const formData = new FormData();
+                    formData.append('name', this.name);
+                    formData.append('email', this.email);
+                    formData.append('password', this.password);
+                    formData.append('password_confirmation', this.password_confirmation);
 
-            fetch('{{ url("registrationUser") }}', {
-                method: 'POST',
-                body: formData,
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.errors) {
-                    this.errors = Object.values(data.errors).flat();
-                } else {
-                    window.location.href = 'login';  // Redirect to login page
+                    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    
+                    fetch("{{ route('registrationUser') }}", {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': token
+                        },
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.errors) {
+                            this.errors = Object.values(data.errors).flat();
+                        } 
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        this.errors.push("Something went wrong, please try again.");
+                    });
                 }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                this.errors.push("Something went wrong, please try again.");
-            });
+            };
         }
     </script>
+
 </body>
 </html>
