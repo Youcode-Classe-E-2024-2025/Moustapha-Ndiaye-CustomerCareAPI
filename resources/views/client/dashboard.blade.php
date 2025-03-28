@@ -276,7 +276,52 @@
                     }
                 },
                 
-               
+                async submitTicket() {
+                    this.loading = true;
+                    this.errorMessage = null;
+                    
+                    try {
+                        const response = await fetch('http://127.0.0.1:8000/api/tickets', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify(this.ticketForm)
+                        });
+                        
+                        if (!response.ok) {
+                            throw new Error('Failed to submit ticket. Please try again.');
+                        }
+                        
+                        const data = await response.json();
+                        
+                        // Show success message with ticket ID
+                        this.successMessage = `Your ticket #${data.data.id} has been submitted successfully. Our support team will review it shortly.`;
+                        
+                        // Add the new ticket to the user's tickets list
+                        this.userTickets.unshift(data.data);
+                        
+                    } catch (error) {
+                        console.error('Error submitting ticket:', error);
+                        this.errorMessage = error.message;
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+                
+                resetForm() {
+                    this.ticketForm = {
+                        title: '',
+                        description: '',
+                        priority: '',
+                        category: '',
+                        creator_id: 2,
+                        assigned_to: null,
+                        status_id: 1
+                    };
+                    this.successMessage = null;
+                }
             };
         }
     </script>
