@@ -18,43 +18,85 @@ class TicketService
      * @param array $filters
      * @return LengthAwarePaginator
      */
-    public function getAllTickets(array $filters = []): LengthAwarePaginator
-    {
-        $query = Ticket::with(['creator', 'assignedAgent', 'status']);
+    // public function getAllTickets(array $filters = []): LengthAwarePaginator
+    // {
+    //     $query = Ticket::with(['creator', 'assignedAgent', 'status']);
 
-        // Apply filters
-        if (isset($filters['status_id']) && $filters['status_id']) {
-            $query->where('status_id', $filters['status_id']);
-        }
+    //     // Apply filters
+    //     if (isset($filters['status_id']) && $filters['status_id']) {
+    //         $query->where('status_id', $filters['status_id']);
+    //     }
 
-        if (isset($filters['priority']) && $filters['priority']) {
-            $query->where('priority', $filters['priority']);
-        }
+    //     if (isset($filters['priority']) && $filters['priority']) {
+    //         $query->where('priority', $filters['priority']);
+    //     }
 
-        if (isset($filters['assigned_to']) && $filters['assigned_to']) {
-            $query->where('assigned_to', $filters['assigned_to']);
-        }
+    //     if (isset($filters['assigned_to']) && $filters['assigned_to']) {
+    //         $query->where('assigned_to', $filters['assigned_to']);
+    //     }
 
-        if (isset($filters['category']) && $filters['category']) {
-            $query->where('category', $filters['category']);
-        }
+    //     if (isset($filters['category']) && $filters['category']) {
+    //         $query->where('category', $filters['category']);
+    //     }
 
-        // Filter by creator if the user is a client
-        $user = Auth::user();
-        if ($user && $user->isClient()) {
-            $query->where('creator_id', $user->id);
-        }
+    //     // Filter by creator if the user is a client
+    //     $user = Auth::user();
+    //     if ($user && $user->isClient()) {
+    //         $query->where('creator_id', $user->id);
+    //     }
 
-        // Apply sorting
-        $sortField = $filters['sort_field'] ?? 'created_at';
-        $sortDirection = $filters['sort_direction'] ?? 'desc';
-        $query->orderBy($sortField, $sortDirection);
+    //     // Apply sorting
+    //     $sortField = $filters['sort_field'] ?? 'created_at';
+    //     $sortDirection = $filters['sort_direction'] ?? 'desc';
+    //     $query->orderBy($sortField, $sortDirection);
 
-        // Paginate results
-        $perPage = $filters['per_page'] ?? 15;
+    //     // Paginate results
+    //     $perPage = $filters['per_page'] ?? 15;
         
-        return $query->paginate($perPage);
+    //     return $query->paginate($perPage);
+    // }
+    public function getAllTickets(array $filters = []): LengthAwarePaginator
+{
+    // Start the query with necessary relationships
+    $query = Ticket::with(['creator', 'assignedAgent', 'status']);
+
+    // Apply filters
+    if (isset($filters['status_id']) && $filters['status_id']) {
+        $query->where('status_id', $filters['status_id']);
     }
+
+    if (isset($filters['priority']) && $filters['priority']) {
+        $query->where('priority', $filters['priority']);
+    }
+
+    if (isset($filters['assigned_to']) && $filters['assigned_to']) {
+        $query->where('assigned_to', $filters['assigned_to']);
+    }
+
+    if (isset($filters['category']) && $filters['category']) {
+        $query->where('category', $filters['category']);
+    }
+
+    // Filter by creator if the user is a client
+    $user = Auth::user();
+    if ($user && $user->isClient()) {
+        $query->where('creator_id', $user->id);
+    }
+
+    // Apply sorting with default fields and direction
+    $sortField = $filters['sort_field'] ?? 'created_at'; // Default sorting by 'created_at'
+    $sortDirection = $filters['sort_direction'] ?? 'desc'; // Default sorting direction is descending
+    $query->orderBy($sortField, $sortDirection);
+
+    // Ensure pagination is a positive integer, set default to 15
+    $perPage = isset($filters['per_page']) && is_numeric($filters['per_page']) && $filters['per_page'] > 0
+        ? $filters['per_page'] 
+        : 20;
+
+    // Paginate results
+    return $query->paginate($perPage);
+}
+
 
     /**
      * Get a ticket by ID

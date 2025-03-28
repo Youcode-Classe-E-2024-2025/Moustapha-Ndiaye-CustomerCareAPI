@@ -121,17 +121,33 @@ class TicketController extends Controller
      *     )
      * )
      */
+    // public function index(Request $request): ResourceCollection
+    // {
+    //     $filters = $request->only([
+    //         'status_id', 'priority', 'assigned_to', 'category',
+    //         'sort_field', 'sort_direction', 'per_page'
+    //     ]);
+        
+    //     $tickets = $this->ticketService->getAllTickets($filters);
+        
+    //     return TicketResource::collection($tickets);
+    // }
     public function index(Request $request): ResourceCollection
-    {
-        $filters = $request->only([
-            'status_id', 'priority', 'assigned_to', 'category',
-            'sort_field', 'sort_direction', 'per_page'
-        ]);
-        
-        $tickets = $this->ticketService->getAllTickets($filters);
-        
-        return TicketResource::collection($tickets);
-    }
+{
+    $validatedFilters = $request->validate([
+        'status_id' => 'nullable|exists:statuses,id',
+        'priority' => 'nullable|in:low,medium,high,urgent',
+        'assigned_to' => 'nullable|exists:users,id',
+        'category' => 'nullable|string|max:255',
+        'sort_field' => 'nullable|in:title,created_at,priority,status_id',
+        'sort_direction' => 'nullable|in:asc,desc',
+        'per_page' => 'nullable|integer|min:1|max:100',
+    ]);
+
+    $tickets = $this->ticketService->getAllTickets($validatedFilters);
+    return TicketResource::collection($tickets);
+}
+
 
     /**
      * @OA\Post(
