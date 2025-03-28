@@ -269,7 +269,8 @@
                         }
                         
                         const data = await response.json();
-                        this.userTickets = data.data.slice(0, 5); // Show only the 5 most recent tickets
+                         // Show only the 5 most recent tickets
+                        this.userTickets = data.data.slice(0, 5);
                     } catch (error) {
                         console.error('Error fetching tickets:', error);
                         // We don't show an error for this as it's not critical
